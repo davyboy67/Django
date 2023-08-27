@@ -8,8 +8,9 @@ class Tag(models.Model):
      
 class TaggedItemManager(models.Manager):
     def get_tags_for(self, obj_type, obj_id):
+        #find the content type id for product model
         content_type = ContentType.objects.get_for_models(obj_type) 
-    
+        #queryset = Product.objects.values('id', 'title', 'orderitem__product_id').order_by('title') #inner join. 
         return TaggedItem.objects.select_related('tag').filter(content_type = content_type, object_id=obj_id)
     
 

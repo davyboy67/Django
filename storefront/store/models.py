@@ -10,6 +10,11 @@ class Collection(models.Model):# defined before product to reference
     title = models.CharField(max_length=255)
     featured_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, related_name='+')# Resolve circular dependancy with product. If product is deleted, change to null value. related_name='+' to not create reverse relationship.
     
+    def __str__(self) -> str:
+        return self.title
+    
+    class Meta:
+        ordering = ['title']
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
@@ -21,6 +26,11 @@ class Product(models.Model):
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT) # Implement a one to many relationship. Creates foreign key.
     promotions = models.ManyToManyField(Promotion) # Many to many relationship. Plural because you want to return all promotions that are relevant to product
     
+    def __str__(self) -> str:
+        return self.title
+    
+    class Meta:
+        ordering = ['title']
     
 class Customer(models.Model):
     MEMBERSHIP_BRONZE = 'B'
@@ -39,6 +49,8 @@ class Customer(models.Model):
     birth_date = models.DateField(null=True)
     membership = models.CharField(max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
     
+    class Meta:
+        ordering = ['first_name', 'last_name']
         
     
 class Order(models.Model):
